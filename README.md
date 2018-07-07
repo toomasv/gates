@@ -5,3 +5,4 @@ Tinkering with logic circuits
 * Draw connections with ctrl-left-mouse.
 * Move gates with left-mouse.
 * Delete gates or connections with right-click-menu.
+* Wndow resizing
