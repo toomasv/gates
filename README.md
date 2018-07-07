@@ -6,3 +6,4 @@ Tinkering with logic circuits
 * Move gates with left-mouse.
 * Delete gates or connections with right-click-menu.
 * Window resizing
+* Gates are multi-slot
