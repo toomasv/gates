@@ -29,7 +29,7 @@ ctx: context [
 			_nand [calc2 gate :not :all]
 			_nor [calc2 gate :not :any]
 			_xor [calc2/x gate :odd? none]
-			_xnor [calc2/x gate :even? none]
+			_nxor [calc2/x gate :even? none]
 		]
 	] 
 	gate-style: [
@@ -113,7 +113,7 @@ ctx: context [
 		_nand: [fill-pen white shape [move 0x2 line 10x2 arc 20x12 10 10 90 sweep arc 20x13 2 2 360 sweep large arc 10x22 10 10 90 sweep line 0x22]]
 		_nor: [fill-pen white shape [move 0x2 arc 20x12 20 20 45 sweep arc 20x13 2 2 360 sweep large arc 0x22 20 20 45 sweep arc 0x2 20 20 60]]
 		_xor: [fill-pen white shape [move 0x2 arc 20x12 20 20 45 sweep arc 0x22 20 20 45 sweep arc 0x2 20 20 60	move 2x0 arc 2x24 22 22 60 sweep move 0x2]]
-		_xnor: [fill-pen white shape [move 0x2 arc 20x12 20 20 45 sweep arc 20x13 2 2 360 sweep large arc 0x22 20 20 45 sweep arc 0x2 20 20 60 move 2x0 arc 2x24 22 22 60 sweep move 0x2]]
+		_nxor: [fill-pen white shape [move 0x2 arc 20x12 20 20 45 sweep arc 20x13 2 2 360 sweep large arc 0x22 20 20 45 sweep arc 0x2 20 20 60 move 2x0 arc 2x24 22 22 60 sweep move 0x2]]
 	]
 	extend system/view/VID/styles compose/deep collect [
 		foreach [gate shape] gates [keep compose/deep/only [(gate) [template: [(to-paren [copy/deep gate-style]) draw: (shape)]]]]
@@ -121,7 +121,7 @@ ctx: context [
 	win: view/flags/options/no-wait [
 		size 500x300
 		pan: panel 500x300 [] all-over with [
-			menu: ["Insert" ["var" _var "and" _and "or" _or "not" _not "nand" _nand "nor" _nor "xor" _xor "xnor" _xnor]]
+			menu: ["Insert" ["var" _var "and" _and "or" _or "not" _not "nand" _nand "nor" _nor "xor" _xor "nxor" _nxor]]
 		]
 		on-over [
 			if all [event/down? and event/ctrl?][face/pane/1/draw/5: event/offset + event/face/offset]
