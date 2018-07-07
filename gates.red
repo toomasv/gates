@@ -5,12 +5,14 @@ Red [
 	Licence: "Free usage"
 	Purpose: "Studying logic circuits"
 	Needs: View
+	File: %gates.red
 ]
 clear-reactions
 ctx: context [
 	diff: 0x0
 	up?: no
 	pos: 0x0
+	con: none
 	calc2: func [gate logic fn /x /local res][
 		gate/draw/2: pick [white red] gate/extra/true?: logic either x [
 			res: 0
@@ -29,12 +31,7 @@ ctx: context [
 			_xor [calc2/x gate :odd? none]
 			_xnor [calc2/x gate :even? none]
 		]
-	]
-	_remove: func [con][
-		remove find con/extra/from/extra/out con
-		remove find con/extra/to/extra/in con
-		remove find con/parent/pane con
-	]
+	] 
 	gate-style: [
 		type: 'base 
 		size: 25x25 
@@ -42,7 +39,7 @@ ctx: context [
 		flags: 'all-over 
 		actors: [
 			on-create: func [face event][
-				face/extra: make deep-reactor! [in: copy [] out: copy [] true?: yes]
+				face/extra: make deep-reactor! [type: 'gate in: copy [] out: copy [] true?: yes]
 				face/menu: either face/options/style = '_var [
 					["True" _true "False" _false "Delete" _delete] 
 				][
@@ -57,7 +54,11 @@ ctx: context [
 							extra: compose [type: 'connection from: (face) to: (none) true?: (yes)]
 							menu: ["Delete" _delete]
 						] 
-						on-menu [switch event/picked [_delete [_remove face]] 'done] 
+						on-menu [switch event/picked [_delete [
+							remove find face/extra/from/extra/out face
+							remove find face/extra/to/extra/in face
+							remove find face/parent/pane face
+						]] 'done] 
 						react (copy/deep [
 							face/extra/true?: face/extra/from/extra/true?
 							face/draw/2: either face/extra/true? ['green]['red]
@@ -90,8 +91,14 @@ ctx: context [
 					_true [face/extra/true?: yes face/draw/5: 'green]
 					_false [face/extra/true?: no face/draw/5: 'red]
 					_delete [
-						foreach con face/extra/out [_remove con]
-						foreach con face/extra/in [_remove con]
+						foreach con face/extra/out [
+							remove find con/extra/to/extra/in con 
+							remove find con/parent/pane con
+						]
+						foreach con face/extra/in [
+							remove find con/extra/from/extra/out con 
+							remove find con/parent/pane con
+						]
 						remove find face/parent/pane face
 					]
 				] 'done
@@ -123,6 +130,6 @@ ctx: context [
 		on-menu [append face/pane layout/only reduce ['at pos event/picked]]
 	][resize][actors: object [on-resizing: func [face event][
 		pan/size: face/size 
-		foreach-face/with pan [face/extra face/size: pan/size][attempt [face/extra/from]]
+		foreach-face/with pan [face/extra face/size: pan/size][face/extra/type = 'connection]
 	]]]
 ]
