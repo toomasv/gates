@@ -1,7 +1,7 @@
 Red [
 	Author: "Toomas Vooglaid"
 	First-version: 2018-07-06
-	Last-edit: 2018-07-07
+	Last-edit: 2018-07-08
 	Licence: "Free usage"
 	Purpose: "Studying logic circuits"
 	Needs: View
@@ -33,6 +33,7 @@ ctx: context [
 			_xnor [calc2/x gate :even? none]
 		]
 	] 
+	expunge: func [face /from pane][pane: any [pane face/parent/pane] remove find pane face] 
 	gate-style: [
 		type: 'base 
 		size: 25x25 
@@ -56,9 +57,9 @@ ctx: context [
 							menu: ["Delete" _delete]
 						] 
 						on-menu [switch event/picked [_delete [
-							remove find face/extra/from/extra/out face
-							remove find face/extra/to/extra/in face
-							remove find face/parent/pane face
+							expunge/from face face/extra/from/extra/out
+							expunge/from face face/extra/to/extra/in
+							expunge face
 						]] 'done] 
 						react (copy/deep [
 							face/extra/true?: face/extra/from/extra/true?
@@ -95,14 +96,14 @@ ctx: context [
 					_false [face/extra/true?: no face/draw/5: 'red]
 					_delete [
 						foreach con face/extra/out [
-							remove find con/extra/to/extra/in con 
-							remove find con/parent/pane con
+							expunge/from con con/extra/to/extra/in
+							expunge con
 						]
 						foreach con face/extra/in [
-							remove find con/extra/from/extra/out con 
-							remove find con/parent/pane con
+							expunge/from con con/extra/from/extra/out
+							expunge con
 						]
-						remove find face/parent/pane face
+						expunge face
 					]
 				] 'done
 			]
@@ -146,7 +147,7 @@ ctx: context [
 									foreach edge face/extra/out [edge/draw/4: face/offset + 12x12]
 								][all [overlap? face box face/extra/type = 'gate]]
 							]
-							on-menu [remove find face/parent/pane face]
+							on-menu [expunge face]
 					] 'done
 				]
 				on-over: func [face event][
